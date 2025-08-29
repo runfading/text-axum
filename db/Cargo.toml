@@ -1,0 +1,10 @@
+[package]
+name = "db"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+common ={path = "../common"}
+
+sea-orm = {workspace = true,features = ["sqlx-mysql","runtime-tokio-rustls","macros"]}
+serde = { workspace = true, features = ["derive"] }

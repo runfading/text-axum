@@ -1,0 +1,32 @@
+[workspace]
+members = ["bin",
+    "db",
+    "service",
+    "bin", "handlers", "common",
+]
+resolver = "2"
+
+[workspace.package]
+authors = ["drf"]
+edition = "2021"
+license = "Apache-2.0"
+publish = false
+repository = ""
+version = "0.1.0"
+
+[workspace.dependencies]
+axum = { version = "0.8.1" }
+tokio = { version = "1.25.0" }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
+tower-http = "0.6.6"
+
+dotenv = "0.15"
+anyhow = "1.0.75"
+
+tower-cookies = "0.11"
+
+# orm
+sea-orm = "1.1.0"
+serde = "1.0.193"
+serde_json = "1.0.143"

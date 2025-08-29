@@ -1,0 +1,26 @@
+[package]
+name = "bin"
+default-run = "bin"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+handlers = {path = "../handlers"}
+common ={path = "../common"}
+
+axum = { workspace = true, features = ["tokio"] }
+tokio = { workspace = true, features = ["full", "macros", "rt-multi-thread"] }
+tracing = {workspace = true}
+tracing-subscriber = {workspace = true}
+tower-http = {workspace = true,features = ["trace"]}
+
+sea-orm = { workspace = true, features = ["sqlx-mysql", "runtime-tokio-rustls", "macros"] }
+dotenv = { workspace = true }
+anyhow = { workspace = true }
+#tera = { workspace = true }
+serde = { workspace = true }
+tower-cookies = { workspace = true }
