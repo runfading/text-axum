@@ -11,6 +11,10 @@ use service::account::account_service;
     get,
     path = "/account/info",
     tag = api::ACCOUNT_TAG,
+    params(
+        ("page" = u64, Query, description = "页码"),
+        ("size" = u64, Query, description = "每页大小")
+    ),
 )]
 pub async fn info(
     State(state): State<AppState>,
