@@ -3,7 +3,12 @@ use common::AppState;
 use sea_orm::Database;
 use std::env;
 use tower_cookies::CookieManagerLayer;
+use tower_http::trace;
 use tower_http::trace::TraceLayer;
+use tracing::Level;
+use tracing_subscriber::filter::EnvFilter;
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::{self, prelude::*};
 
 #[tokio::main]
 pub async fn main() -> anyhow::Result<()> {
@@ -11,10 +16,11 @@ pub async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().expect(".env文件加载失败");
 
     // 日志
-    init_log();
+    // init_log();
 
+    setup_tracing();
     //提取变量
-    let db_url = env::var("DATABASE_URL").unwrap();
+    let db_url = env::var("DATABASE_URL").expect(".env文件中未配置 DATABASE_URL 变量");
     let host = env::var("HOST").expect(".env文件中未配置 HOST 变量");
     let port = env::var("PORT").expect(".env文件中未配置 HOST 变量");
     //拼接监听url
@@ -25,11 +31,16 @@ pub async fn main() -> anyhow::Result<()> {
     //创建状态变量s
     let shared_state = AppState::new(db);
 
+    let trace_layer = TraceLayer::new_for_http()
+        .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
+        .on_request(trace::DefaultOnRequest::new().level(Level::INFO))
+        .on_response(trace::DefaultOnResponse::new().level(Level::INFO));
+
     //构建路由 ,注入Cookie层和状态对象
     let app = Router::new()
-        .layer(TraceLayer::new_for_http())
         .layer(CookieManagerLayer::new())
-        .merge(handlers::routers::routers(shared_state));
+        .merge(handlers::routers::routers(shared_state))
+        .layer(trace_layer); // 和顺序还有一定的关系，要在路由下面
 
     //开启监听
     tracing::info!("server start on {}", server_url);
@@ -38,14 +49,21 @@ pub async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn init_log() {
-    std::env::set_var("RUST_LOG", "info,tower_http=debug");
+fn setup_tracing() {
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")); // 默认 info
 
-    tracing_subscriber::fmt()
-        .with_target(false) // 不显示目标模块名
-        .with_level(true) // 显示日志级别
-        .with_thread_ids(true) // 显示线程ID
-        // .with_file(true)     // 显示文件名
-        // .with_line_number(true)  // 显示行号
+    tracing_subscriber::registry()
+        .with(filter)
+        .with(
+            tracing_subscriber::fmt::layer()
+                .with_target(true)
+                .with_level(true)
+                .with_thread_ids(true),
+        )
         .init();
+
+    tracing::debug!(
+        "tracing 初始化完成，日志级别: {}",
+        env::var("RUST_LOG").unwrap_or("未设置".into())
+    );
 }

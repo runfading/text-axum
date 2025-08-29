@@ -11,5 +11,6 @@ pub fn routes() -> OpenApiRouter<AppState> {
             controller::create,
             controller::delete
         ))
+        // 这个宏不能同时注册相同请求类型的接口，即使路径不同
         .routes(routes!(controller::modify))
 }

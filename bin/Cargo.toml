@@ -9,18 +9,16 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-handlers = {path = "../handlers"}
-common ={path = "../common"}
+handlers = { path = "../handlers" }
+common = { path = "../common" }
 
 axum = { workspace = true, features = ["tokio"] }
 tokio = { workspace = true, features = ["full", "macros", "rt-multi-thread"] }
-tracing = {workspace = true}
-tracing-subscriber = {workspace = true}
-tower-http = {workspace = true,features = ["trace"]}
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter"] }
+tower-http = { workspace = true, features = ["trace", "tracing"] }
 
 sea-orm = { workspace = true, features = ["sqlx-mysql", "runtime-tokio-rustls", "macros"] }
 dotenv = { workspace = true }
 anyhow = { workspace = true }
-#tera = { workspace = true }
-serde = { workspace = true }
 tower-cookies = { workspace = true }
