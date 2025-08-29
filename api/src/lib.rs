@@ -12,14 +12,16 @@ mod swagger;
 // 定义账户相关API的标签常量
 pub const ACCOUNT_TAG: &str = "Account";
 
-pub fn swagger_routers() -> Router {
-    let (router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
+pub fn swagger_routers() -> OpenApiRouter {
+    OpenApiRouter::with_openapi(ApiDoc::openapi())
         .routes(routes!(health))
         .routes(routes!(
             inner::secret_handlers::get_secret,
             inner::secret_handlers::post_secret
         ))
-        .split_for_parts();
-    // 合并路由和swagger ui路由
+}
+
+pub fn swagger_router(api: OpenApiRouter) -> Router {
+    let (router, api) = api.split_for_parts();
     router.merge(SwaggerUi::new("/swagger-ui").url("/apidoc/openapi.json", api))
 }

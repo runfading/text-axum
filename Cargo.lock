@@ -772,6 +772,7 @@ dependencies = [
  "common",
  "service",
  "utoipa",
+ "utoipa-axum",
 ]
 
 [[package]]

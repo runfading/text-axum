@@ -1,6 +1,6 @@
 use axum::Router;
 use common::AppState;
-use sea_orm::{Database};
+use sea_orm::Database;
 use std::env;
 use tower_cookies::CookieManagerLayer;
 use tower_http::trace::TraceLayer;
@@ -23,7 +23,7 @@ pub async fn main() -> anyhow::Result<()> {
     let db = Database::connect(db_url).await?;
 
     //创建状态变量s
-    let shared_state = AppState { db };
+    let shared_state = AppState::new(db);
 
     //构建路由 ,注入Cookie层和状态对象
     let app = Router::new()

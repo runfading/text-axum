@@ -15,3 +15,4 @@ common = { path = "../common" }
 axum = { workspace = true }
 
 utoipa = { workspace = true }
+utoipa-axum = {workspace = true}

@@ -69,17 +69,20 @@ impl<T: Serialize> PageResult<T> {
 #[derive(Debug, Clone)]
 pub enum ErrorEnum {
     SysError(String),
+    DBError,
 }
 
 impl ResponseError for ErrorEnum {
     fn code(&self) -> i32 {
         match self {
+            ErrorEnum::DBError => 0001,
             ErrorEnum::SysError(_) => 9999,
         }
     }
 
     fn message(&self) -> &str {
         match self {
+            ErrorEnum::DBError => "数据库没有准备好",
             ErrorEnum::SysError(msg) => msg,
         }
     }

@@ -1,13 +1,15 @@
 pub mod controller;
 
-use axum::routing::{delete, get, post};
-use axum::Router;
 use common::AppState;
+use utoipa_axum::router::OpenApiRouter;
+use utoipa_axum::routes;
 
-pub fn routers() -> Router<AppState> {
-    Router::new()
-        .route("/info", get(controller::info))
-        .route("/create", post(controller::create))
-        .route("/modify", post(controller::modify))
-        .route("/delete/{id}", delete(controller::delete))
+pub fn routes() -> OpenApiRouter<AppState> {
+    OpenApiRouter::new()
+        .routes(routes!(
+            controller::info,
+            controller::create,
+            controller::delete
+        ))
+        .routes(routes!(controller::modify))
 }
