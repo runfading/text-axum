@@ -9,6 +9,9 @@ version.workspace = true
 
 [dependencies]
 service = { path = "../service" }
+api = { path = "../api" }
 common = { path = "../common" }
 
 axum = { workspace = true }
+
+utoipa = { workspace = true }

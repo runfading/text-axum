@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 common = { path = "../common" }
+api = {path = "../api"}
 db = { path = "../db" }
 
 tokio = { workspace = true, features = ["full", "macros", "rt-multi-thread"] }

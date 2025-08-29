@@ -11,3 +11,5 @@ version.workspace = true
 sea-orm = { workspace = true }
 axum = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
+
+utoipa = {workspace = true}

@@ -1,0 +1,17 @@
+[package]
+name = "api"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+axum = { workspace = true }
+serde = { workspace = true }
+
+# openapi
+utoipa = { workspace = true, features = ["axum_extras", "debug"] }
+utoipa-swagger-ui = { workspace = true, features = ["axum","vendored"] }
+utoipa-axum = { workspace = true }

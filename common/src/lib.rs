@@ -1,5 +1,4 @@
 pub mod response;
-pub mod account;
 
 use sea_orm::DatabaseConnection;
 

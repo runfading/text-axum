@@ -3,8 +3,9 @@ use axum::response::{IntoResponse, Response as AxumResponse};
 use axum::Json;
 use serde::Serialize;
 use std::fmt;
+use utoipa::ToSchema;
 
-#[derive(Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct Response<T: serde::Serialize> {
     code: i32,
     message: String,
@@ -52,7 +53,7 @@ pub trait ResponseError {
     fn message(&self) -> &str;
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct PageResult<T: Serialize> {
     pub total: u64,
     pub page: u64,

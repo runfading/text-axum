@@ -1,12 +1,20 @@
+use api::account::info::{AccountInfoDTO, CreateAccountDTO, ModifyAccountDTO, PageQueryDTO};
 use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use axum::Json;
-use common::account::info::{AccountInfoDTO, CreateAccountDTO, ModifyAccountDTO, PageQueryDTO};
 use common::response::ErrorEnum;
 use common::response::{PageResult, Response};
 use common::AppState;
 use service::account::account_service;
 
+#[utoipa::path(
+    get,
+    path = "/account/info",
+    responses(
+        (status = 200, description = "成功获取账户信息", body = Response<PageResult<AccountInfoDTO>>)
+    ),
+    tag = api::ACCOUNT_TAG,
+)]
 pub async fn info(
     State(state): State<AppState>,
     Query(page_query): Query<PageQueryDTO>,
@@ -18,6 +26,11 @@ pub async fn info(
     Ok(body)
 }
 
+#[utoipa::path(
+    post,
+    path = "/account/create",
+    tag = api::ACCOUNT_TAG,
+)]
 pub async fn create(
     State(state): State<AppState>,
     Json(create): Json<CreateAccountDTO>,
@@ -30,6 +43,11 @@ pub async fn create(
     Ok(result)
 }
 
+#[utoipa::path(
+    post,
+    path = "/account/modify",
+    tag = api::ACCOUNT_TAG,
+)]
 pub async fn modify(
     State(state): State<AppState>,
     Json(modify): Json<ModifyAccountDTO>,
@@ -42,6 +60,11 @@ pub async fn modify(
     Ok(result)
 }
 
+#[utoipa::path(
+    delete,
+    path = "/account/delete/{id:u64}",
+    tag = api::ACCOUNT_TAG,
+)]
 pub async fn delete(
     State(state): State<AppState>,
     Path(id): Path<u64>,

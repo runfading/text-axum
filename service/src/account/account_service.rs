@@ -1,4 +1,4 @@
-use common::account::info::{AccountInfoDTO, CreateAccountDTO, ModifyAccountDTO, PageQueryDTO};
+use api::account::info::{AccountInfoDTO, CreateAccountDTO, ModifyAccountDTO, PageQueryDTO};
 use common::response::PageResult;
 use db::account::entities::account::ActiveModel;
 use db::account::entities::prelude::Account;
