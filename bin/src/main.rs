@@ -51,6 +51,12 @@ pub async fn main() -> anyhow::Result<()> {
 
 fn setup_tracing() {
     let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")); // 默认 info
+                                                                                               // 自定义时间格式（可按需调整）
+    let offset = time::UtcOffset::from_hms(8, 0, 0).expect("invalid utc offset");
+    let timer = tracing_subscriber::fmt::time::OffsetTime::new(
+        offset,
+        time::format_description::well_known::Rfc3339,
+    );
 
     tracing_subscriber::registry()
         .with(filter)
@@ -58,7 +64,8 @@ fn setup_tracing() {
             tracing_subscriber::fmt::layer()
                 .with_target(true)
                 .with_level(true)
-                .with_thread_ids(true),
+                .with_thread_ids(true)
+                .with_timer(timer),
         )
         .init();
 

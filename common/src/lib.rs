@@ -1,6 +1,6 @@
+pub mod error;
 pub mod response;
 
-use crate::response::{ErrorEnum, ResponseError};
 use axum::http::StatusCode;
 use sea_orm::DatabaseConnection;
 
@@ -21,7 +21,7 @@ impl AppState {
         if self.db.is_some() {
             Ok(self.db.as_ref().unwrap())
         } else {
-            Err((StatusCode::INTERNAL_SERVER_ERROR, ErrorEnum::DBError.message()))
+            Err((StatusCode::INTERNAL_SERVER_ERROR, error::DB_ERR.1))
         }
     }
 }

@@ -1,8 +1,7 @@
 use api::account::info::{AccountInfoDTO, CreateAccountDTO, ModifyAccountDTO, PageQueryDTO};
 use axum::extract::{Path, Query, State};
-use axum::http::StatusCode;
 use axum::Json;
-use common::response::ErrorEnum;
+use common::error::AppError;
 use common::response::{PageResult, Response};
 use common::AppState;
 use service::account::account_service;
@@ -19,12 +18,9 @@ use service::account::account_service;
 pub async fn info(
     State(state): State<AppState>,
     Query(page_query): Query<PageQueryDTO>,
-) -> Result<Response<PageResult<AccountInfoDTO>>, (StatusCode, &'static str)> {
-    let body = match account_service::account_info(state.db()?, &page_query).await {
-        Ok(accounts) => Response::build_success(accounts),
-        Err(err) => Response::build_failure(ErrorEnum::SysError(err.to_string())),
-    };
-    Ok(body)
+) -> Result<Response<PageResult<AccountInfoDTO>>, AppError> {
+    let body = account_service::account_info(state.db()?, &page_query).await?;
+    Response::build_success(body)
 }
 
 #[utoipa::path(
@@ -35,13 +31,9 @@ pub async fn info(
 pub async fn create(
     State(state): State<AppState>,
     Json(create): Json<CreateAccountDTO>,
-) -> Result<Response<()>, (StatusCode, &'static str)> {
-    let result = match account_service::create_account(state.db()?, &create).await {
-        Ok(_) => Response::build_success(()),
-        Err(err) => Response::build_failure(ErrorEnum::SysError(err.to_string())),
-    };
-
-    Ok(result)
+) -> Result<Response<()>, AppError> {
+    account_service::create_account(state.db()?, &create).await?;
+    Response::empty_success()
 }
 
 #[utoipa::path(
@@ -52,13 +44,9 @@ pub async fn create(
 pub async fn modify(
     State(state): State<AppState>,
     Json(modify): Json<ModifyAccountDTO>,
-) -> Result<Response<()>, (StatusCode, &'static str)> {
-    let result = match account_service::modify_account(state.db()?, &modify).await {
-        Ok(_) => Response::build_success(()),
-        Err(err) => Response::build_failure(ErrorEnum::SysError(err.to_string())),
-    };
-
-    Ok(result)
+) -> Result<Response<()>, AppError> {
+    account_service::modify_account(state.db()?, &modify).await?;
+    Response::empty_success()
 }
 
 #[utoipa::path(
@@ -69,11 +57,7 @@ pub async fn modify(
 pub async fn delete(
     State(state): State<AppState>,
     Path(id): Path<u64>,
-) -> Result<Response<()>, (StatusCode, &'static str)> {
-    let result = match account_service::delete_account(state.db()?, id).await {
-        Ok(_) => Response::build_success(()),
-        Err(err) => Response::build_failure(ErrorEnum::SysError(err.to_string())),
-    };
-
-    Ok(result)
+) -> Result<Response<()>, AppError> {
+    account_service::delete_account(state.db()?, id).await?;
+    Response::empty_success()
 }
