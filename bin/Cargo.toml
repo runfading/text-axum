@@ -15,10 +15,11 @@ common = { path = "../common" }
 axum = { workspace = true, features = ["tokio"] }
 tokio = { workspace = true, features = ["full", "macros", "rt-multi-thread"] }
 tracing = { workspace = true }
-tracing-subscriber = { workspace = true, features = ["env-filter"] }
+tracing-subscriber = { workspace = true, features = ["env-filter","time"] }
 tower-http = { workspace = true, features = ["trace", "tracing"] }
+time = {workspace = true}
 
 sea-orm = { workspace = true, features = ["sqlx-mysql", "runtime-tokio-rustls", "macros"] }
 dotenv = { workspace = true }
 anyhow = { workspace = true }
-tower-cookies = { workspace = true }
+tower-cookies = { workspace = true}

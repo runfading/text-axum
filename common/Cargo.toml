@@ -8,8 +8,10 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
+anyhow = { workspace = true }
+tracing = { workspace = true }
 sea-orm = { workspace = true }
 axum = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 
-utoipa = {workspace = true}
+utoipa = { workspace = true }
