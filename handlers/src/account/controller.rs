@@ -1,6 +1,7 @@
 use api::account::info::{AccountInfoDTO, CreateAccountDTO, ModifyAccountDTO, PageQueryDTO};
 use axum::extract::{Path, Query, State};
 use axum::Json;
+use axum_valid::Valid;
 use common::error::AppError;
 use common::response::{PageResult, Response};
 use common::AppState;
@@ -17,7 +18,7 @@ use service::account::account_service;
 )]
 pub async fn info(
     State(state): State<AppState>,
-    Query(page_query): Query<PageQueryDTO>,
+    Valid(Query(page_query)): Valid<Query<PageQueryDTO>>,
 ) -> Result<Response<PageResult<AccountInfoDTO>>, AppError> {
     let body = account_service::account_info(state.db()?, &page_query).await?;
     Response::build_success(body)
@@ -30,7 +31,7 @@ pub async fn info(
 )]
 pub async fn create(
     State(state): State<AppState>,
-    Json(create): Json<CreateAccountDTO>,
+    Valid(Json(create)): Valid<Json<CreateAccountDTO>>,
 ) -> Result<Response<()>, AppError> {
     account_service::create_account(state.db()?, &create).await?;
     Response::empty_success()
@@ -43,7 +44,7 @@ pub async fn create(
 )]
 pub async fn modify(
     State(state): State<AppState>,
-    Json(modify): Json<ModifyAccountDTO>,
+    Valid(Json(modify)): Valid<Json<ModifyAccountDTO>>,
 ) -> Result<Response<()>, AppError> {
     account_service::modify_account(state.db()?, &modify).await?;
     Response::empty_success()
