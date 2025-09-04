@@ -11,6 +11,9 @@ version.workspace = true
 axum = { workspace = true }
 serde = { workspace = true }
 
+# validator
+validator = {workspace = true,features = ["derive"]}
+
 # openapi
 utoipa = { workspace = true, features = ["axum_extras", "debug"] }
 utoipa-swagger-ui = { workspace = true, features = ["axum","vendored"] }
